@@ -1,4 +1,7 @@
 #include "deck.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h> 
 int shuffle(){
     struct deck deck_instance; 
     struct deck temp; 
@@ -41,12 +44,22 @@ int shuffle(){
  return 0; 
 }
 int deal_player_cards(struct player* target){
-
+return 0; 
 }
 struct card* next_card(){
-
+struct deck deck_instance;
+deck_instance.top_card = 0; 
+struct card temp; //blank card 
+for (int i = 1; i < deck_size(); i++){
+    deck_instance.list[i-1] = deck_instance.list[i]; 
 }
-size_t deck_size(){
+deck_instance.list[deck_size() -1] = temp; // set last card to blank 
+return deck_instance.top_card;
+}
 
+size_t deck_size(){
+   struct deck deck_instance;
+   size_t deck_size = szieof(deck_instance.list)/sizeof(deck_instance.list[0]);
+   return deck_size; 
 }
 

@@ -1,4 +1,5 @@
 #include "player.h"
+#include <stdio.h>
 
 int add_card(struct player* target, struct card* new_card){
     struct hand* temp;  
@@ -31,55 +32,33 @@ if (previous != NULL)
     return 1; /* Return true; we found and removed the item */ 
 }
 char check_add_book(struct player* target){
-    int temp1 = 0, temp2 = 0 , temp3 = 0, temp4 = 0; 
-    struct card list1[4];
-    struct card list2[4];
-    struct card list3[4];
-    struct card list4[4];
-for (int i = 0; i < (int) target->hand_size; i++){
-    int j = 0,k = 0,l = 0,m = 0; 
-    if(search(target->card_list->top.rank, 'C') == 1) {
-     temp1++;
-     list1[j] = target->card_list->top; 
-     j++;
+    char arr[13] = {'2','3','4','5','6','7','8','9','10','J','Q','K','A'};
+    struct hand* iterator = target->card_list; 
+    struct card* temp = &iterator->top;
+for (int i = 0; i < 13; i++){
+    if (i == 8){
+        target->card_list->top.rank[1] = '1'; 
+    }
+    int x = 0; 
+    if(search(target, arr[i]) == 1){
+        while(temp != NULL){
+            temp = &iterator->next;
+            iterator = iterator->next; 
+            if (temp->rank == (char*) arr[i]){
+                x++;
+            }
+        }
+        if (x == 4){
+            return arr[i];
+            while(temp != NULL){
+                temp = &iterator->next;
+                iterator = iterator->next; 
+                if (temp->rank == (char*) arr[i]){
+                    remove_card(target, temp); 
+                } 
+        }
     } 
-    if(search(target->card_list->top.rank, 'D') == 1) {
-        temp2++;
-        list2[k] = target->card_list->top; 
-     k++;
-    }
-    if(search(target->card_list->top.rank, 'S') == 1){
-        temp3++;
-        list3[l] = target->card_list->top; 
-     l++;
-    }
-    if(search(target->card_list->top.rank, 'H') == 1){
-        temp4++;
-        list4[m] = target->card_list->top; 
-        m++;
-    }
-    if (temp1 == 4){
-        for (int i = 0; i < j; i++){
-        remove_card(target, &list1[i]);
-        }
-    }
-        if (temp2 == 4){
-            for (int i = 0; i < j; i++){
-            remove_card(target, &list2[k]);
-        }
-    }
-        if (temp3 == 4){
-            for (int i = 0; i < j; i++){
-            remove_card(target, &list3[l]);
-        }
-    }
-        if (temp4 == 4){
-            for (int i = 0; i < j; i++){
-            remove_card(target, &list4[m]);
-        }
-    }
-
-
+}
 }
 return 0; 
 }
@@ -102,10 +81,10 @@ struct card* temp = &iterator->top;
     if (search(src, rank) == 1){
         while ( i != src->hand_size ) { /* Check if we found the item */
             temp = &iterator->next;
-            if (temp->rank == rank){
+            if (temp->rank == (char) rank){
                 remove_card(src,temp);
                 add_card(dest, temp); 
-                x++;
+               x++;
             }
             if (temp == NULL)            
              return 0;                         
@@ -120,6 +99,9 @@ int x = 0;
 char arr[13] = {'2','3','4','5','6','7','8','9','10','J','Q','K','A'};
 for (int i = 0; i < 7; i++){
     for (int j = 0; j < 13; j++){
+        if (j == 8){
+            target->card_list->top.rank[1] = '1'; 
+        }
     if(target->book[i] == arr[j]){
         x++;
     }
@@ -131,11 +113,36 @@ if (x == 7){
 return 0; 
 }
 int reset_player(struct player* target){
+    free(target->card_list); 
+    for(int i = 0; i <sizeof(target->book); i++){
+        target->book[i] = ""; 
+    } 
 return 0; 
 }
 char computer_play(struct player* target){
-return 0;
+    char arr[13] = {'2','3','4','5','6','7','8','9','10','J','Q','K','A'};
+    char possible[4]; 
+    int x = 0; 
+    for (int i = 0; i < 13; i++){
+        if (i == 8){
+            target->card_list->top.rank[1] = '1'; 
+        }
+       if( search(target, arr[i]) == 1){
+           possible[x] = arr[i]; 
+           x++;
+       } 
+    } 
+    int y = rand() % x; 
+    return possible[y];
 }
 char user_play(struct player* target){
+    int x = 0; 
+    while(x == 0){
+    char c = getchar(); 
+    if (search (target, c) == 0){
+        printf("Error = must have at least one card from rank to play");
+     
+    } else x = 1; 
+}
   return 0; 
 }
