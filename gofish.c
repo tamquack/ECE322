@@ -15,46 +15,32 @@ int main(int args, char* argv[])
   deal_player_cards(user); 
   deal_player_cards(computer); 
 while(play != 1){
-  printf("Player 1's Hand - %c", user->card_list); 
-  printf("\n"); 
-  printf("Player 1's Book - %c", user->book);
-  printf("\n"); 
-  printf("Player 2's Book - %c", computer->book);
-  printf("\n");
+  printf("Player 1's Hand - %s\n",(char*) user->card_list);  
+  printf("Player 1's Book - %s\n", user->book); 
+  printf("Player 2's Book - %s\n", computer->book);
   
  
   user_play(user); 
   while (check_add_book(user) != 0){
-    printf("Player 1's Hand - %c", user->card_list); 
-  printf("\n"); 
-  printf("Player 1's Book - %c", user->book);
-  printf("\n"); 
-  printf("Player 2's Book - %c", computer->book);
-  printf("\n");
+    printf("Player 1's Hand - %s\n", (char*) user->card_list); 
+  printf("Player 1's Book - %s\n", user->book); 
+  printf("Player 2's Book - %s\n", computer->book);
     user_play(user);
   }
     computer_play(computer); 
     while (check_add_book(computer) != 0){
-      printf("Player 1's Hand - %c", user->card_list); 
-  printf("\n"); 
-  printf("Player 1's Book - %c", user->book);
-  printf("\n"); 
-  printf("Player 2's Book - %c", computer->book);
-  printf("\n");
+      printf("Player 1's Hand - %s\n",(char*) user->card_list);  
+  printf("Player 1's Book - %s\n", user->book); 
+  printf("Player 2's Book - %s\n", computer->book);
       computer_play(computer); 
     }
-    if(game_over){
-      printf("Player 1's Hand - %c", user->card_list); 
-      printf("\n"); 
-      printf("Player 1's Book - %c", user->book);
-      printf("\n"); 
-      printf("Player 2's Book - %c", computer->book);
-      printf("\n");
-      printf("%s Wins! %c-%c", game_over.winner, user->book, computer->book);
-      printf("\n");
-      printf("\n");
-      printf("Do you want to play again?", argv[1]);
-      if (argv[1] == "N"){
+    if(&game_over){
+      printf("Player 1's Hand - %s\n", (char*) user->card_list); 
+      printf("Player 1's Book - %s\n", user->book); 
+      printf("Player 2's Book - %s\n", computer->book);
+      printf("%s Wins! %s-%s\n", "LOL", user->book, computer->book);
+      printf("\nDo you want to play again?", argv[1]);
+      if (argv[1] == 'N'){
         play = 1;  
         printf("Exiting."); 
       }
