@@ -43,23 +43,54 @@ int shuffle(){
  }
  return 0; 
 }
-int deal_player_cards(struct player* target){
+int deal_player_cards(struct player* target){ 
+struct deck deck_instance;  
+struct card* temp; 
+int i = 0, x = 0; 
+size_t size = target->hand_size;
+while ( i < size){
+    while( temp == NULL){
+    temp = &deck_instance.list[x];
+    x++; 
+    }
+    add_card(target, temp);
+    temp = NULL; 
+i++;
+}
+struct hand* iterator;
+iterator = &target->hand_size; 
+printf("\nPlayer1 Cards: ");
+printf("\n"); 
+while(iterator != NULL){
+
+    printf("%c%c%c ", iterator->top.rank[1],iterator->top.rank[0],iterator->top.suit);
+iterator = iterator->next;
+}
+{
+    for (int k = 0; k < 52; k++)
+        printf("%c%c%c ", deck_instance.list[k].rank[1],deck_instance.list[k].rank[0],deck_instance.list[k].suit);
+    printf("\n");
+ }
 return 0; 
 }
-struct card* next_card(){
+struct card* next_card() {
 struct deck deck_instance;
-deck_instance.top_card = 0; 
-struct card temp; //blank card 
-for (int i = 1; i < deck_size(); i++){
-    deck_instance.list[i-1] = deck_instance.list[i]; 
-}
-deck_instance.list[deck_size() -1] = temp; // set last card to blank 
-return deck_instance.top_card;
+struct card temp; 
+int len = sizeof(deck_instance.list) / sizeof(temp);
+for (int i= 1; i < deck_size(); i++){
+deck_instance.list[i] = deck_instance.list[i]; 
+} 
+deck_instance.list[deck_size() - 1] = temp; 
+
+for (int k = 0; k < 52; k++)
+        printf("%c%c%c ", deck_instance.list[k].rank[1],deck_instance.list[k].rank[0],deck_instance.list[k].suit);
+    printf("\n");
+return 0;
 }
 
 size_t deck_size(){
    struct deck deck_instance;
-   size_t deck_size = szieof(deck_instance.list)/sizeof(deck_instance.list[0]);
+   size_t deck_size = sizeof(deck_instance.list)/sizeof(deck_instance.list[0]);
    return deck_size; 
 }
 

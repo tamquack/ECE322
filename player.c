@@ -2,14 +2,18 @@
 #include <stdio.h>
 
 int add_card(struct player* target, struct card* new_card){
-    struct hand* temp;  
+    /* Allocate space for new element */
+    struct hand* temp;   
+    struct card val; 
     temp = (struct hand*)malloc(sizeof(struct hand));
-    if (temp == NULL){ return -1; }
-    struct card* val = &temp->top; 
-    val = new_card; 
+     if (temp == NULL) { return -1; }
+    /* Initialize new element */ 
+    temp->top = *new_card; 
     temp->next = target->card_list;
-    target->card_list = temp; 
-    return 0; 
+    
+    /* Set list to temp, the new front of list*/
+    target->card_list = temp;
+    return 0;
 }
 int remove_card(struct player* target, struct card* old_card){
     struct hand* iterator = target->card_list;
@@ -64,12 +68,10 @@ return 0;
 }
 int search(struct player* target, char rank){
     struct hand* iterator = target->card_list; 
-    struct card* temp = &iterator->top;
-    while ( temp->rank != rank ) { /* Check if we found the item */
-        temp = &iterator->next;
-        if (temp == NULL)            
-         return 0;                       
-        iterator = iterator->next;        
+    while ( iterator->top.rank != rank ) { /* Check if we found the item */
+        iterator = iterator->next; 
+        if (iterator == NULL)            
+         return 0;                               
     }
 return 1; 
 }
