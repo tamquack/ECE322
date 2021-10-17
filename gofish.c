@@ -29,7 +29,7 @@ int main(int args, char* argv[]) {
 		if (turncounter % 2 == 1) // PLAYER TURN
 		{
 			printf("Player 1's turnAAA, enter a Rank: \n");
-			scanf("%c",GuessRank); // Change these 2 lines to user_play
+			scanf(" %c",GuessRank); // Change these 2 lines to user_play
 			if (search(&computer,GuessRank) == 0)// Guess = 1 if found
 			//if (Guess == 0)
 			{
