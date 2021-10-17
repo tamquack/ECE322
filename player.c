@@ -106,7 +106,7 @@ char check_add_book(struct player* target){
         rank[1] = card1.rank[1]; 
         for (i = 0; i < 7; i++){
             if(target->book[i] == '\0'){
-                target->book[i] = rank; 
+                target->book[i] = rank[0]; 
                 break; 
             }
         }      
@@ -115,7 +115,7 @@ char check_add_book(struct player* target){
     remove_card(target, &card3);
     remove_card(target, &last_card);
 
-    return rank; 
+    return rank[0]; 
     }
 
     return 0; 
@@ -131,7 +131,6 @@ return 1;
 }
 int transfer_cards(struct player* src, struct player* dest, char rank){
 struct hand* iterator = src->card_list; 
-struct card temp;
  int i, x = 0;
  if (search(src, rank) == 0) {return 0; }
  for (i = 0; iterator != NULL; i++){
@@ -182,20 +181,26 @@ char computer_play(struct player* target){
     for(int i = 0; i <= len; i++){
         play = play->next; 
     }
-    return play->top.rank;
+    return play->top.rank[0];
 }
 char user_play(struct player* target){
-    int x = 0;
-    char c;  
-    char list[3] = ""; 
-    while(x == 0){
-     c = scanf("%3s",list); 
-    while(getchar != '\n'); 
-    if (search (target, c) == 0){
-        printf("Error = must have at least one card from rank to play"); 
-    }else if(list[0] == ""){
-        printf("Error = must have at least one card from rank to play");
-    } else x = 1; 
-}
-  return c; 
+     char letter; 
+     int x = 0; 
+     while(x == 0){
+         printf("Player 1's turn, enter a rank: ");
+         char list[4] = ""; 
+         scanf("%3s", list);
+         while(getchar() != '\n');
+
+         if(list[1] == '\0'){
+             letter = list[0];
+             x = 1;  
+         }
+         else {
+             printf("Error - must have at least one card from rank to play\n");
+             continue;
+         }
+         printf("Error - must have at least one card from rank to play\n");
+        }
+        return letter; 
 }
