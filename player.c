@@ -6,14 +6,14 @@ int add_card(struct player* target, struct card* new_card){
     struct hand* temp = target->card_list;
     int i; 
     if(target->hand_size == 0){
-    target->card_list = (struct hand*)malloc(sizeof(struct hand));
-     if (temp == NULL) { return -1; }
+    temp = (struct hand*)malloc(sizeof(struct hand));
+    // if (temp == NULL) { return -1; }
     /* Initialize new element */ 
     temp->top = *new_card; 
     temp->next = NULL;
     
     /* Set list to temp, the new front of list*/
-   //  target->card_list = temp; 
+    target->card_list = temp;  
     } else{ 
         for(i = 0; i < target->hand_size-1; i++){
             temp = temp->next; 
@@ -25,107 +25,142 @@ int add_card(struct player* target, struct card* new_card){
     temp->next->next = NULL; 
     }
     target->hand_size++;
+
     return 0; 
 }
 int remove_card(struct player* target, struct card* old_card){
-    int card = 0;  
-    struct hand* temp = target->card_list;
-    struct hand* previous = target->card_list; 
-    if(target->hand_size <= 0){return -1;}
-    while(temp != NULL){
-        if(temp->top.suit == old_card->suit && temp->top.rank[0] == old_card->rank[0] && temp->top.rank[1] == old_card->rank[1]){
-            card = 1;  
+    int i = 0, card = 0; 
+    struct hand* iterator = target->card_list;
+    struct hand* previous = NULL; 
+    if (iterator == NULL) {return -1; } /* Return false; list is empty */
+    while(i < target->hand_size){
+        if(iterator->top.suit == old_card->suit 
+            && iterator != NULL
+            && iterator->top.rank[0] == old_card->rank[0]
+            && iterator->top.rank[1] == old_card->rank[1]){
+            card = 1; 
+            break; 
         }
-        previous = temp; 
-        temp = temp->next; 
+        previous = iterator; 
+        iterator = iterator->next;
+        i++;
     }
-    if (card == 0){return -1;}
-    if(previous == NULL || previous->top.suit == '\0') {
-        target->card_list = target->card_list->next;
-        free(temp); 
-        target->hand_size--; 
-        return 0; 
-    } else if (temp == NULL || temp->top.suit == '\0'){
-        return -1; 
-    } else {
-        previous->next = temp->next;
-        free(temp); 
-        target->hand_size--;
-        return 0; 
-    }
-return -1;
-}
+     
+    if(card == 0){return -1;}
+     /* Found item; break out of loop */
+     if (previous == NULL || previous->top.suit == '\0'){
+         target->card_list = target->card_list->next;
+       target->hand_size--;	
+       return 0; 
+       }  else if(iterator == NULL || iterator->top.suit == '\0') { 
+        return -1;        
+     } else {
+         previous->next = iterator->next; 
+         target->hand_size--; 
+         free(iterator);
+         return 0; 
+     }
+     return -1; 
+ }
 char check_add_book(struct player* target){
-    char arr[13] = {'2','3','4','5','6','7','8','9','10','J','Q','K','A'};
-    struct hand* iterator = target->card_list; 
-    if (iterator == NULL){return 0;}
-for (int i = 0; i < 13; i++){
-    int x = 0; 
-    if(search(target, arr[i]) == 1){
-        while(iterator != NULL){
-            iterator = iterator->next; 
-            if (iterator->top.rank[0] == arr[i]){
-                x++;
+    struct hand* temp = target->card_list;
+    struct card card1; 
+    struct card card2;
+    struct card card3; 
+    int counter = 0, i = 0, n = 0;  
+    while (counter < target->hand_size - 1 && temp->next != NULL){
+        temp = temp->next; 
+        counter++; 
+    }
+    struct card last_card = temp->top;
+    struct hand* last_hand = target->card_list; 
+    char c[2], d[2]; 
+    for (int j = 0; j < 2; j++){ 
+        c[j]= last_card.rank[j];
+        }
+    while(i < target->hand_size - 1 && last_hand != NULL){
+        for (int j = 0; j < 2; j++){ 
+            d[j]= last_hand->top.rank[j];
             }
-        }
-        if (x == 4){
-            return arr[i];
-            while(iterator != NULL){
-                iterator = iterator->next; 
-                if (iterator->top.rank[0] == arr[i]){
-                    remove_card(target, iterator); 
-                } 
-        }
-    } 
-}
-}
- 
-return 0; 
+            i++;
+            last_hand = last_hand->next; 
+            if (i >= target->hand_size-1 || last_hand == NULL){
+                return 0; 
+            }
+                if(n == 1 && c[0] == d[0] && c[1] == d[1]){
+                    card1= last_hand->top; 
+                } else if (n == 2 && c[0] == d[0] && c[1] == d[1]){
+                    card2 = last_hand->top;
+                }
+                else if (n == 3 && c[0] == d[0] && c[1] == d[1]){
+                    card3 = last_hand->top;
+                    n++; 
+                }
+                else{return 0; }
+                if (c[0] == d[0] && c[1] == d[1]){n++;}
+
+    }
+    if (n == 4){
+        char rank[2]; 
+        rank[0] = card1.rank[0]; 
+        rank[1] = card1.rank[1]; 
+        for (i = 0; i < 7; i++){
+            if(target->book[i] == '\0'){
+                target->book[i] = rank; 
+                break; 
+            }
+        }      
+    remove_card(target, &card1);
+    remove_card(target, &card2);
+    remove_card(target, &card3);
+    remove_card(target, &last_card);
+
+    return rank; 
+    }
+
+    return 0; 
 }
 int search(struct player* target, char rank){
     struct hand* iterator = target->card_list; 
     if (iterator == NULL){return 0;}
-    while ( iterator->top.rank != rank ) { /* Check if we found the item */
+    while ( iterator->top.rank[0] != rank ) { /* Check if we found the item */
         iterator = iterator->next; 
-        if (iterator == NULL)            
-         return 0;                               
+        if (iterator == NULL){ return 0;}                               
     }
 return 1; 
 }
 int transfer_cards(struct player* src, struct player* dest, char rank){
 struct hand* iterator = src->card_list; 
-struct card* temp = &iterator->top;
- int i = 0, x = 0;
- if (iterator == NULL || temp == NULL) { return -1;} 
-    if (search(src, rank) == 1){
-        while ( i != src->hand_size ) { /* Check if we found the item */
-            temp = &iterator->next;
-            if (temp->rank == (char) rank){
-                add_card(dest, temp);
-                remove_card(src,temp);
-               x++;
-            }
-            if (temp == NULL) {return -1;}                       
-            iterator = iterator->next;  
-            i++;      
-        }
-}
-return x;
+struct card temp;
+ int i, x = 0;
+ if (search(src, rank) == 0) {return 0; }
+ for (i = 0; iterator != NULL; i++){
+     
+     if(iterator->top.rank[0] == rank){
+        add_card(dest, &iterator->top);
+         remove_card(src, &iterator->top);
+         x++; 
+     }
+     
+     iterator = iterator->next;
+
+ }
+ if (i != src->hand_size){
+     return -1; 
+ }
+ return x; 
 }
 int game_over(struct player* target){
-int x = 0; 
-char arr[13] = {'2','3','4','5','6','7','8','9','10','J','Q','K','A'};
-for (int i = 0; i < 7; i++){
-    for (int j = 0; j < 13; j++){
-        if (j == 8){
-            target->card_list->top.rank[1] = '1'; 
+    int x = 0; 
+    for (int i = 0; i < 7; i++){
+        if (target->book[i] != '\0'){
+            x++;
         }
-    if(target->book[i] == arr[j]){x++;}
     }
-  }
-if (x == 7){return 1;}
-
-return 0; 
+    if (x == 7){
+        return 1; 
+    }
+    return 0; 
 }
 int reset_player(struct player* target){
     struct card* temp = &target->card_list->top; 
@@ -142,23 +177,12 @@ int reset_player(struct player* target){
   return 0; 
 }
 char computer_play(struct player* target){
-    char arr[13] = {'2','3','4','5','6','7','8','9','10','J','Q','K','A'};
-    char possible[4];  
-    int x = 0; 
-    for (int i = 0; i < 13; i++){
-        if (i == 8){
-            target->card_list->top.rank[1] = '1'; 
-        }
-       if( search(target, arr[i]) == 1){
-           possible[x] = arr[i]; 
-           x++;
-       } 
-    } 
-    int y = rand() % x; 
-    if(possible[y] == '10'){ printf( '10\n');}
-      else{printf('%c\n', possible[y]);}
-
-    return possible[y];
+    int len = rand() % target->hand_size; 
+    struct hand* play = target->card_list; 
+    for(int i = 0; i <= len; i++){
+        play = play->next; 
+    }
+    return play->top.rank;
 }
 char user_play(struct player* target){
     int x = 0;
