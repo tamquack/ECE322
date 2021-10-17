@@ -34,7 +34,8 @@ int main(int args, char* argv[]) {
 	           printf("   - Player 2 has no %cs",GuessRank);
 		   fish = deck_instance.list[deck_instance.top_card];
 		   add_card(&user,next_card());
-		   printf("   - Go Fish, Player 1 draws %c%c%c",fish.rank[0],fish.rank[1],fish.suit);			 //  bookcheck = check_add_book(&user);
+		   printf("   - Go Fish, Player 1 draws %c%c%c",fish.rank[0],fish.rank[1],fish.suit);			 
+		   bookcheck = check_add_book(&user);
 
 		   if (user.book != 0)
 		       {
@@ -74,7 +75,8 @@ int main(int args, char* argv[]) {
 	           printf("   - Player 1 has no %cs",GuessRank);
 		   fish = deck_instance.list[deck_instance.top_card];
 		   add_card(&computer,next_card());
-		   printf("   - Go Fish, Player 2 draws %c%c%c",fish.rank[0],fish.rank[1],fish.suit);			   bookcheck = check_add_book(&computer);
+		   printf("   - Go Fish, Player 2 draws %c%c%c",fish.rank[0],fish.rank[1],fish.suit);			   
+		   bookcheck = check_add_book(&computer);
 
 		   if (bookcheck == 1)
 		       {
