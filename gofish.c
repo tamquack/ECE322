@@ -6,22 +6,23 @@
 int main(int args, char* argv[]) {
      
      int turncounter = 1;
-     int winner = 0;
-     char bookcheck;
-     char Guess, GuessRank;
-     char Input;
+     int winner = 1;
+
+     char Guess, GuessRank, bookcheck, Input ;
      struct card fish;
      shuffle();
      deal_player_cards(&user);
      deal_player_cards(&computer);
      
-     while (winner == 0){
-	 if (game_over(&user) == 1 || game_over(&computer) == 1){
-		break;}
+     while (1 == 1){
+
 	 printHand(&user);
     	 printBooks(&user);
      	 printBooks(&computer);
-	
+	 if (game_over(&user) == 1 || game_over(&computer) == 1)
+		{
+		break;
+		}
          if (turncounter % 2 == 1) // PLAYER TURN
          {
 	    printf("Player 1's turn, enter a Rank: ");
@@ -33,9 +34,9 @@ int main(int args, char* argv[]) {
 	           printf("   - Player 2 has no %cs",GuessRank);
 		   fish = deck_instance.list[deck_instance.top_card];
 		   add_card(&user,next_card());
-		   printf("   - Go Fish, Player 1 draws %c%c%c",fish.rank[0],fish.rank[1],fish.suit);			   bookcheck = check_add_book(&user);
+		   printf("   - Go Fish, Player 1 draws %c%c%c",fish.rank[0],fish.rank[1],fish.suit);			 //  bookcheck = check_add_book(&user);
 
-		   if (bookcheck == 1)
+		   if (user.book != 0)
 		       {
 		        printf("   - Player 1 books %c\n  - Player 1 gets another turn", bookcheck);
 		       }
@@ -109,6 +110,14 @@ int main(int args, char* argv[]) {
 	      
 
     } // close the while loop
+    if (game_over(&computer) == 1){
+	winner = 2;
+	}
+    else{
+	 winner = 1;
+	}
+
+	printf("Player %d Wins! %d-%d",winner,7,6);
       return 0;
     
  }
