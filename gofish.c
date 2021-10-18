@@ -4,23 +4,18 @@
 #include "deck.h"
 #include "gofish.h"
 int main(int args, char* argv[]) {
-     
-     int turncounter = 1;
-     int winner = 1;
-	
+     int game = 1; 
+      char GuessRank,GuessR, bookcheck;
 
-     char Guess, GuessRank,GuessR, bookcheck;
+	 while(game == 1){
+	 int turncounter = 1;
+     int winner = 1;	    
      char replay[3] = ""; 
      struct card fish;
-	 do{
 	 shuffle();
-	 printf("fault 1"); 
 	 reset_player(&user);
-	 printf("\nfault 2");
-	 reset_player(&computer); 
-	 printf("\nfault 3"); 
+	 reset_player(&computer);
      deal_player_cards(&user);
-	 printf("\nfault 4"); 
      deal_player_cards(&computer);
 	 int counter1 = 0;
 	 int counter2 = 0; 
@@ -29,9 +24,7 @@ int main(int args, char* argv[]) {
 	 hand(&user);
 	 printf("\nPlayer 1's Book: "); 
 	 book(&user);
-	 printf("\n");
-	 //hand(&computer); 
-	 printf("\nPlayer 2's Book: "); 
+	 printf("Player 2's Book: "); 
      	 book(&computer);
 
 	 //if (1==1)
@@ -48,11 +41,10 @@ int main(int args, char* argv[]) {
 				
 				printf("   - Player 2 has no %cs\n",GuessRank);
 				if(deck_size() == 51){
-					printf("empty Book"); 
+				printf("Empty Book!\n"); 
 					break; 
 				}fish = deck_instance.list[deck_instance.top_card];
 				add_card(&user,next_card());
-				printf("fault2\n");
 				printf("   - Go Fish, Player 1 draws %c%c%c\n",fish.rank[1],fish.rank[0],fish.suit);
 				if (fish.rank[0] == GuessRank)
 				{
@@ -96,6 +88,7 @@ int main(int args, char* argv[]) {
 				printf("   - Player 1 books %c\n", bookcheck);
 				}
 				if(deck_size() == 51){
+					printf("Empty Deck!\n"); 
 					break; 
 				}
 				printf("   - Player 1 gets another turn\n");
@@ -113,13 +106,13 @@ int main(int args, char* argv[]) {
 				
 				printf("   - Player 1 has no %cs\n",GuessR);
 				if(deck_size() == 51){
-					printf("Empty Deck!");
+					printf("Empty Deck!\n ");
 					break; 
 				}
 				fish = deck_instance.list[deck_instance.top_card];
 				add_card(&computer,next_card());
 				printf("   - Go Fish, Player 2 draws %c%c%c\n",fish.rank[1],fish.rank[0],fish.suit);
-				if (fish.rank[0] == GuessRank)			   
+				if (fish.rank[0] == GuessR)			   
 				{if(computer.book[counter2] != '\0'){
 						bookcheck = computer.book[counter2]; 
 						printf("   - Player 2 books %c\n", bookcheck);
@@ -160,6 +153,7 @@ int main(int args, char* argv[]) {
 					printf("   - Player 2 books %c\n", bookcheck); 
 					}
 					if(deck_size() == 51){
+						printf("Empty Deck!\n");
 						break; 
 					}
 				printf("   - Player 2 gets another turn\n");
@@ -178,9 +172,9 @@ int main(int args, char* argv[]) {
 	else
 	{
 	winner = 1;
-	}
+	} 
 
-	printf("Player %d Wins! %d-%d\nDo you want to play again[Y/N]:",winner,7,6);
+	printf("Player %d Wins! %d-%d\nDo you want to play again[Y/N]:",winner, counter1, counter2);
 	
 	do{
 		scanf(" %2s",replay);
@@ -195,12 +189,13 @@ int main(int args, char* argv[]) {
 		}
 		}while(1);
 if (replay[0] == 'N'){
-	break;
-} 
-
-}while(1);
-printf("See you next time!\n"); 
+	game = 0; 
 }
+	 }
+printf("See you next time!\n"); 
+
+}
+
 
 void hand(struct player* target){
 	struct hand* temp = target->card_list; 
@@ -234,8 +229,8 @@ void DispResult(struct player* target, char rank){
 			printf(", %c%c%c",playerH->top.rank[1], playerH->top.rank[0], playerH->top.suit);
 		}
 		playerH = playerH->next;
-	}
-	printf("\n");
-	return; 
-}
+	 
+}printf("\n");
+	return;
  
+}

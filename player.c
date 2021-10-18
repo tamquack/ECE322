@@ -92,7 +92,7 @@ char check_add_book(struct player* target){
 
     }
     if (n == 4){
-        char rank[2]; 
+        char rank[2];
         rank[0] = card1.rank[0]; 
         rank[1] = card1.rank[1]; 
         for (i = 0; i < 7; i++){
@@ -152,15 +152,15 @@ int game_over(struct player* target){
     return 0; 
 }
 int reset_player(struct player* target){
-    struct card* temp = &target->card_list->top; 
-  while(target->card_list != NULL){
-      remove_card(target, temp); 
-  }
-  int i; 
-  for ( i = 0; i <7; i++){
+    int i;
+    for ( i = 0; i <7; i++){
       target->book[i] = '\0'; 
+  } 
+  while(target->card_list != NULL){
+      remove_card(target,&target->card_list->top ); 
   }
-  if (i != 7 || target->hand_size != 0 || target->card_list != NULL){
+  
+  if (i != 7 || target->hand_size != 0){
       return -1; 
   }
   return 0; 
