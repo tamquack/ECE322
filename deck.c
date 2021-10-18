@@ -70,8 +70,8 @@ return 0;
 struct card* next_card() {
     if (deck_instance.top_card < 51)
     {
-        deck_instance.top_card++;
-        return &deck_instance.list[deck_instance.top_card];
+        //deck_instance.top_card++;
+        return &deck_instance.list[deck_instance.top_card++];
     }
     else
         return NULL;
