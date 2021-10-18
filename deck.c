@@ -42,21 +42,21 @@ int shuffle(){
     printf("\n");
  }
  deck_instance.top_card = 0; 
- printf("Shuffling deck...\n\n");
+ printf("Shuffling deck...\n");
  return 0; 
 }
 
 
 int deal_player_cards(struct player* target){ 
-int i = 0; 
+    int i = 0;
 struct card* card; 
 while (i < 7){
-    if(next_card() != NULL){
         card = next_card(); 
+        if (card == NULL){
+            return -1; 
+        }
         add_card(target, card);
-	check_add_book(target);
-        i++; 
-    } else {return -1;} 
+        i++;  
 }
 struct hand* iterator = target->card_list; 
 if (iterator == NULL){
@@ -76,9 +76,8 @@ struct card* next_card() {
 }
 
 size_t deck_size(){
-    if (deck_instance.top_card >= 52){
-        return 0; 
+    if (deck_instance.top_card >= 51){
+        return 51; 
     }
    return deck_instance.top_card; 
 }
-

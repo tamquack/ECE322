@@ -73,21 +73,18 @@ char check_add_book(struct player* target){
     }
     struct card last_card = temp->top;
     struct hand* last_hand = target->card_list; 
-    char c, d; 
-        c= last_card.rank[0];
 
-    while(i < target->hand_size - 1 && last_hand != NULL){ 
-            d= last_hand->top.rank[0];
-            i++;
+    while(i++ < target->hand_size - 1 && last_hand != NULL){ 
             last_hand = last_hand->next; 
-                if(n == 1 && c == d){
+                if(n == 1 && last_card.rank[0] == last_hand->top.rank[0]){
                     card1= last_hand->top; 
                     n++;
-                } else if (n == 2 && c == d){
+                } else if (n == 2 && last_card.rank[0] == last_hand->top.rank[0]){
                     card2 = last_hand->top;
                     n++;
                 }   
-                else if (n == 3 && c == d){
+                else if (n == 3 &&last_card.rank[0] == last_hand->top.rank[0] 
+                    &&  last_hand->top.suit != last_card.suit){
                     card3 = last_hand->top;
                     n++;
                     break;  
@@ -99,7 +96,7 @@ char check_add_book(struct player* target){
         rank[0] = card1.rank[0]; 
         rank[1] = card1.rank[1]; 
         for (i = 0; i < 7; i++){
-            if(target->book[i] == '\0' || target->book == 0){
+            if(target->book[i] == '\0'){
                 target->book[i] = rank[0]; 
                 break; 
             }
@@ -108,7 +105,6 @@ char check_add_book(struct player* target){
         remove_card(target, &card2);
         remove_card(target, &card3);
         remove_card(target, &last_card);
-        printf("TEST");
         return rank[0]; 
         }
     //printf("Test2");
@@ -178,23 +174,31 @@ char computer_play(struct player* target){
     return play->top.rank[0];
 }
 char user_play(struct player* target){
-     char letter; 
-     int x = 0; 
-     while(x == 0){
-         printf("Player 1's turn, enter a rank: ");
-         char list[4] = ""; 
-         scanf("%3s", list);
-         while(getchar() != '\n');
-
-         if(list[1] == '\0' && search(target, list[0]) == 1){
-             letter = list[0];
-             x = 1;  
-         }
-         else {
-             printf("Error - must have at least one card from hand to play\n");
-             continue;
-         }
-    
+    char letter; 
+    int x = 0; 
+    while(x == 0){
+        printf("Player 1's turn, enter a rank: ");
+        char list[4] = ""; 
+        scanf("%3s", list);
+        while(getchar() != '\n');
+        if (list[0] == '0'){
+            printf("Error - must have at least one card from hand to play\n");
+            continue;
         }
-        return letter; 
+        if(list[1] == '\0' && search(target, list[0]) == 1){
+            letter = list[0];
+            x = 1;
+        }
+
+        else if (list[1] == '0' && search(target, list[1]) == 1 && list[0] == '1'){
+            letter = '0';
+            x = 1;
+        }
+        else {
+            printf("Error - must have at least one card from hand to play\n");
+            continue;
+        }
+
+       }
+       return letter; 
 }

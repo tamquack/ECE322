@@ -40,4 +40,14 @@ void hand(struct player* target);
 * target: The player 
 */
 void book(struct player* target);
+
+/*
+* Function: DispResult 
+* --------------------
+* Displays Results from draw, when a card is transferred from one player to another
+* it'll print the cards being transferred. 
+*
+* target: The Player who has the cards
+*/
+void DispResult(struct player* target, char rank);
 #endif
