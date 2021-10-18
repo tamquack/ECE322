@@ -3,8 +3,10 @@
 #include <stdlib.h>
 #include <time.h> 
 int shuffle(){
-    struct deck deck_instance; 
-    char num[13] = {'2','3','4','5','6','7','8','9','10','J','Q','K','A'};
+    //struct deck deck_instance; 
+    deck_instance = *(struct deck*)malloc(sizeof(struct deck));
+
+    char num[13] = {'2','3','4','5','6','7','8','9','0','J','Q','K','A'};
     char Suit[4] = {'C','S','H','D'};
     struct card cards; 
     struct card cardT; 
@@ -21,7 +23,7 @@ int shuffle(){
         cards.rank[0] = num[incs];
          cards.suit = Suit[inc];
         deck_instance.list[i] = cards;
-        cards.rank[1]=NULL; 
+        cards.rank[1]='\0'; 
   incs++;
     }
 
@@ -40,8 +42,14 @@ int shuffle(){
     printf("\n");
  }
  deck_instance.top_card = 0; 
+ printf("Shuffling deck...\n\n");
  return 0; 
 }
+
+
+
+
+
 int deal_player_cards(struct player* target){ 
 int i = 0; 
 struct card* card; 
@@ -49,6 +57,7 @@ while (i < 7){
     if(next_card() != NULL){
         card = next_card(); 
         add_card(target, card);
+	check_add_book(target);
         i++; 
     } else {return -1;} 
 }
