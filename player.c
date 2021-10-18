@@ -198,9 +198,9 @@ char user_play(struct player* target){
          }
          else {
              printf("Error - must have at least one card from rank to play\n");
-             continue;
-         }
-         printf("Error - must have at least one card from rank to play\n");
+           //  continue;
+               }
+         //printf("Error - must have at least one card from rank to play\n");
         }
         return letter; 
 }
