@@ -20,9 +20,10 @@ int main(int args, char* argv[]) {
      
      while (1 == 1){
 	 hand(&user);
-	 printf("\n Player 1's Book: "); 
-    	 book(&user);
-	 printf("\n Player 2's Book: "); 
+	 printf("\nPlayer 1's Book: "); 
+	 book(&user);
+	 hand(&computer);
+	 printf("\nPlayer 2's Book: "); 
      	 book(&computer);
 
 	 //if (1==1)
@@ -35,13 +36,18 @@ int main(int args, char* argv[]) {
 			GuessRank = user_play(&user); 
 			if (search(&computer,GuessRank) == 0)// Guess = 1 if found
 			//if (Guess == 0)
-		{
+			{
 				printf("   - Player 2 has no %cs\n",GuessRank);
 				fish = deck_instance.list[deck_instance.top_card];
 				add_card(&user,next_card());
-				printf("   - Go Fish, Player 1 draws %c%c%c\n",fish.rank[1],fish.rank[0],fish.suit);			   
+				printf("   - Go Fish, Player 1 draws %c%c%c\n",fish.rank[1],fish.rank[0],fish.suit);
+				if (fish.rank[0] == GuessRank)
+				{
+					printf("\n  - Player 1 gets another turn {Fishpath}\n");
+					continue;
+				}			   
 				bookcheck = check_add_book(&user);
-				printf("BC\n %c",bookcheck);
+
 				if (bookcheck != '\0')
 				{
 						printf("   - Player 1 books: ");
@@ -61,7 +67,6 @@ int main(int args, char* argv[]) {
 			//DispResult(GuessRank); 
 				transfer_cards(&computer,&user,GuessRank);
 				bookcheck = check_add_book(&user);
-				printf("bookcheck is %c",bookcheck);
 
 				if (bookcheck != '\0')
 				{
@@ -75,16 +80,16 @@ int main(int args, char* argv[]) {
 
 		else
 		{ // COMPUTER TURN
-			GuessR = computer_play(&user); //should be computer_play
+			GuessR = computer_play(&computer); //should be computer_play
 			printf("Player 2's turn, enter a Rank:%c \n",GuessR);
-			if (search(&user,GuessRank) == 0)// Guess = 1 if found
+			if (search(&user,GuessR) == 0)// Guess = 1 if found
 			{
 				printf("   - Player 1 has no %cs\n",GuessR);
 				fish = deck_instance.list[deck_instance.top_card];
 				add_card(&computer,next_card());
 				printf("   - Go Fish, Player 2 draws %c%c%c\n",fish.rank[1],fish.rank[0],fish.suit);			   
 				bookcheck = check_add_book(&computer);
-				printf("bookcheck is %c",bookcheck);
+	
 
 				if (bookcheck != '\0')
 				{
@@ -92,7 +97,7 @@ int main(int args, char* argv[]) {
 				}
 				else
 				{
-				printf("   - Player 1's turnBBB\n");
+				printf("   - Player 1's turn\n");
 				turncounter++;
 				}
 			
@@ -106,13 +111,11 @@ int main(int args, char* argv[]) {
 				 
 				if (check_add_book(&computer) != '\0')
 					{
-					printf("   - Player 2 books %c\n  - Player 2 gets another turn\n", bookcheck); 
+					printf("   - Player 2 books %c\n", bookcheck); 
 					}
-				else{
-				printf("   - Player 1's turnCCC\n");
-				turncounter++;
+				printf("   - Player 2 gets another turn\n");
 
-				}
+				
 			}
 		}
 
@@ -172,5 +175,3 @@ void book(struct player* target)
 	printf("\n"); 
 	return; 
 }
-
- 

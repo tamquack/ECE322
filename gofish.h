@@ -39,4 +39,5 @@ void hand(struct player* target);
 *
 * target: The player 
 */
+void book(struct player* target);
 #endif

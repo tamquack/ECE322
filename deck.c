@@ -47,9 +47,6 @@ int shuffle(){
 }
 
 
-
-
-
 int deal_player_cards(struct player* target){ 
 int i = 0; 
 struct card* card; 
@@ -74,6 +71,7 @@ struct card* next_card() {
         return &deck_instance.list[deck_instance.top_card++];
     }
     else
+        printf("finished deck");
         return NULL;
 }
 
@@ -81,6 +79,6 @@ size_t deck_size(){
     if (deck_instance.top_card >= 52){
         return 0; 
     }
-   return deck_instance.top_card + 1; 
+   return deck_instance.top_card; 
 }
 

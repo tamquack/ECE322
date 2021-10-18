@@ -82,9 +82,11 @@ char check_add_book(struct player* target){
             last_hand = last_hand->next; 
                 if(n == 1 && c == d){
                     card1= last_hand->top; 
+                    n++;
                 } else if (n == 2 && c == d){
                     card2 = last_hand->top;
-                }
+                    n++;
+                }   
                 else if (n == 3 && c == d){
                     card3 = last_hand->top;
                     n++;
@@ -102,16 +104,16 @@ char check_add_book(struct player* target){
                 break; 
             }
         }      
-    remove_card(target, &card1);
-    remove_card(target, &card2);
-    remove_card(target, &card3);
-    remove_card(target, &last_card);
-
-    return rank[0]; 
-    }
-
+        remove_card(target, &card1);
+        remove_card(target, &card2);
+        remove_card(target, &card3);
+        remove_card(target, &last_card);
+        printf("TEST");
+        return rank[0]; 
+        }
+    //printf("Test2");
     return 0; 
-}
+}   
 int search(struct player* target, char rank){
     struct hand* iterator = target->card_list; 
     if (iterator == NULL){return 0;}
@@ -177,7 +179,6 @@ char computer_play(struct player* target){
 }
 char user_play(struct player* target){
      char letter; 
-     struct player* temp; 
      int x = 0; 
      while(x == 0){
          printf("Player 1's turn, enter a rank: ");
