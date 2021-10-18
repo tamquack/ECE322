@@ -25,7 +25,7 @@ int add_card(struct player* target, struct card* new_card){
     temp->next->next = NULL; 
     }
     target->hand_size++;
-
+    check_add_book(target); 
     return 0; 
 }
 int remove_card(struct player* target, struct card* old_card){
@@ -67,37 +67,29 @@ char check_add_book(struct player* target){
     struct card card1; 
     struct card card2;
     struct card card3; 
-    int counter = 0, i = 0, n = 0;  
-    while (counter < target->hand_size - 1 && temp->next != NULL){
+    int counter = 0, i = 0, n = 1;  
+    while (counter++ < target->hand_size - 1 && temp->next != NULL){
         temp = temp->next; 
-        counter++; 
     }
     struct card last_card = temp->top;
     struct hand* last_hand = target->card_list; 
-    char c[2], d[2]; 
-    for (int j = 0; j < 2; j++){ 
-        c[j]= last_card.rank[j];
-        }
-    while(i < target->hand_size - 1 && last_hand != NULL){
-        for (int j = 0; j < 2; j++){ 
-            d[j]= last_hand->top.rank[j];
-            }
+    char c, d; 
+        c= last_card.rank[0];
+
+    while(i < target->hand_size - 1 && last_hand != NULL){ 
+            d= last_hand->top.rank[0];
             i++;
             last_hand = last_hand->next; 
-            if (i >= target->hand_size-1 || last_hand == NULL){
-                return 0; 
-            }
-                if(n == 1 && c[0] == d[0] && c[1] == d[1]){
+                if(n == 1 && c == d){
                     card1= last_hand->top; 
-                } else if (n == 2 && c[0] == d[0] && c[1] == d[1]){
+                } else if (n == 2 && c == d){
                     card2 = last_hand->top;
                 }
-                else if (n == 3 && c[0] == d[0] && c[1] == d[1]){
+                else if (n == 3 && c == d){
                     card3 = last_hand->top;
-                    n++; 
+                    n++;
+                    break;  
                 }
-                else{return 0; }
-                if (c[0] == d[0] && c[1] == d[1]){n++;}
 
     }
     if (n == 4){
@@ -105,7 +97,7 @@ char check_add_book(struct player* target){
         rank[0] = card1.rank[0]; 
         rank[1] = card1.rank[1]; 
         for (i = 0; i < 7; i++){
-            if(target->book[i] == '\0'){
+            if(target->book[i] == '\0' || target->book == 0){
                 target->book[i] = rank[0]; 
                 break; 
             }
@@ -178,13 +170,14 @@ int reset_player(struct player* target){
 char computer_play(struct player* target){
     int len = rand() % target->hand_size; 
     struct hand* play = target->card_list; 
-    for(int i = 0; i <= len; i++){
+    for(int i = 0; i < len; i++){
         play = play->next; 
     }
     return play->top.rank[0];
 }
 char user_play(struct player* target){
      char letter; 
+     struct player* temp; 
      int x = 0; 
      while(x == 0){
          printf("Player 1's turn, enter a rank: ");
@@ -192,15 +185,15 @@ char user_play(struct player* target){
          scanf("%3s", list);
          while(getchar() != '\n');
 
-         if(list[1] == '\0'){
+         if(list[1] == '\0' && search(target, list[0]) == 1){
              letter = list[0];
              x = 1;  
          }
          else {
-             printf("Error - must have at least one card from rank to play\n");
-           //  continue;
-               }
-         //printf("Error - must have at least one card from rank to play\n");
+             printf("Error - must have at least one card from hand to play\n");
+             continue;
+         }
+    
         }
         return letter; 
 }
