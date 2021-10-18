@@ -17,12 +17,15 @@ int main(int args, char* argv[]) {
 	 reset_player(&computer); 
      deal_player_cards(&user);
      deal_player_cards(&computer);
+	 int counter1 = 0;
+	 int counter2 = 0; 
      
      while (1 == 1){
 	 hand(&user);
 	 printf("\nPlayer 1's Book: "); 
 	 book(&user);
-	 hand(&computer);
+	 printf("\n");
+	 hand(&computer); 
 	 printf("\nPlayer 2's Book: "); 
      	 book(&computer);
 
@@ -43,15 +46,21 @@ int main(int args, char* argv[]) {
 				printf("   - Go Fish, Player 1 draws %c%c%c\n",fish.rank[1],fish.rank[0],fish.suit);
 				if (fish.rank[0] == GuessRank)
 				{
+					if (user.book[counter1] != '\0')
+				{
+					bookcheck = user.book[counter1]; 
+					counter1++;
+					printf("   - Player 1 books %c\n", bookcheck);
+				}
 					printf("\n  - Player 1 gets another turn {Fishpath}\n");
 					continue;
 				}			   
-				bookcheck = check_add_book(&user);
 
-				if (bookcheck != '\0')
+				if (user.book[counter1] != '\0')
 				{
-						printf("   - Player 1 books: ");
-						book(&user); 
+				    bookcheck = user.book[counter1]; 
+					counter1++;
+					printf("   - Player 1 books %c\n", bookcheck);
 						printf("\n  - Player 1 gets another turn\n");
 				} 
 				//if fish.rank[]  //Create this edge case
@@ -64,12 +73,16 @@ int main(int args, char* argv[]) {
 
 			else
 			{
-			//DispResult(GuessRank); 
+			printf("Player 1 Has: ");
+			DispResult(&user, GuessRank);
+			printf("Player 2 Has: ");
+			DispResult(&computer, GuessRank);
 				transfer_cards(&computer,&user,GuessRank);
 				bookcheck = check_add_book(&user);
 
-				if (bookcheck != '\0')
-				{
+				if (user.book[counter1] != '\0')
+				{ bookcheck = user.book[counter1]; 
+					counter1++; 
 				printf("   - Player 1 books %c\n", bookcheck);
 				}
 				printf("   - Player 1 gets another turn\n");
@@ -81,19 +94,29 @@ int main(int args, char* argv[]) {
 		else
 		{ // COMPUTER TURN
 			GuessR = computer_play(&computer); //should be computer_play
-			printf("Player 2's turn, enter a Rank:%c \n",GuessR);
+			printf("   - Player 2's turn, enter a Rank:%c \n",GuessR);
 			if (search(&user,GuessR) == 0)// Guess = 1 if found
 			{
 				printf("   - Player 1 has no %cs\n",GuessR);
 				fish = deck_instance.list[deck_instance.top_card];
 				add_card(&computer,next_card());
-				printf("   - Go Fish, Player 2 draws %c%c%c\n",fish.rank[1],fish.rank[0],fish.suit);			   
-				bookcheck = check_add_book(&computer);
-	
+				printf("   - Go Fish, Player 2 draws %c%c%c\n",fish.rank[1],fish.rank[0],fish.suit);
+				if (fish.rank[0] == GuessRank)			   
+				{if(computer.book[counter2] != '\0'){
+						bookcheck = computer.book[counter2]; 
+						printf("   - Player 2 books %c\n", bookcheck);
+						counter2++;
+					}
+					printf("\n  - Player 2 gets another turn {Fishpath}\n"); 
+					
+					continue; 
+				}
 
-				if (bookcheck != '\0')
+				if (computer.book[counter2] != '\0')
 				{
+					bookcheck = computer.book[counter2]; 
 					printf("   - Player 2 books %c\n  - Player 2 gets another turn\n", bookcheck);
+					counter2++;
 				}
 				else
 				{
@@ -106,11 +129,16 @@ int main(int args, char* argv[]) {
 
 				else
 			{
-					//DispResult(GuessR); 
+				printf("   - Player 2 Has: " );
+					DispResult(&computer, GuessR); 
+				printf("   - Player 1 Has: ");
+				    DispResult(&user, GuessR); 
 				transfer_cards(&user,&computer,GuessR);
 				 
-				if (check_add_book(&computer) != '\0')
+				if (computer.book[counter2] != '\0')
 					{
+						bookcheck = computer.book[counter2]; 
+						counter2++;
 					printf("   - Player 2 books %c\n", bookcheck); 
 					}
 				printf("   - Player 2 gets another turn\n");
@@ -120,7 +148,9 @@ int main(int args, char* argv[]) {
 		}
 
 
-			
+	if(deck_size() == 52){
+		break; 
+	}		
 
 	} // close the while loop
 	if (game_over(&computer) == 1)
@@ -175,3 +205,20 @@ void book(struct player* target)
 	printf("\n"); 
 	return; 
 }
+void DispResult(struct player* target, char rank){
+	int n = 0; 
+	struct hand* playerH = target->card_list; 
+	for (int i = 0; i < target->hand_size; i ++){
+		if (playerH->top.rank[0] == rank && n == 0){
+			printf("%c%c%c",playerH->top.rank[1], playerH->top.rank[0], playerH->top.suit);
+			n++; 
+		}
+		else if(playerH->top.rank[0] == rank){
+			printf(", %c%c%c",playerH->top.rank[1], playerH->top.rank[0], playerH->top.suit);
+		}
+		playerH = playerH->next;
+	}
+	printf("\n");
+	return; 
+}
+ 
