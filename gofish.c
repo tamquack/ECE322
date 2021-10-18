@@ -36,7 +36,7 @@ int main(int args, char* argv[]) {
 			if (search(&computer,GuessRank) == 0)// Guess = 1 if found
 			//if (Guess == 0)
 		{
-				printf("   - Player 2 has no %ss\n",GuessRank);
+				printf("   - Player 2 has no %cs\n",GuessRank);
 				fish = deck_instance.list[deck_instance.top_card];
 				add_card(&user,next_card());
 				printf("   - Go Fish, Player 1 draws %c%c%c\n",fish.rank[1],fish.rank[0],fish.suit);			   
@@ -44,7 +44,9 @@ int main(int args, char* argv[]) {
 				printf("BC\n %c",bookcheck);
 				if (bookcheck != '\0')
 				{
-						printf("   - Player 1 books %c\n  - Player 1 gets another turn\n", bookcheck);
+						printf("   - Player 1 books: ");
+						book(&user); 
+						printf("\n  - Player 1 gets another turn\n");
 				} 
 				//if fish.rank[]  //Create this edge case
 				else
@@ -75,7 +77,7 @@ int main(int args, char* argv[]) {
 		{ // COMPUTER TURN
 			GuessR = computer_play(&user); //should be computer_play
 			printf("Player 2's turn, enter a Rank:%c \n",GuessR);
-			if (search(&computer,GuessRank) == 0)// Guess = 1 if found
+			if (search(&user,GuessRank) == 0)// Guess = 1 if found
 			{
 				printf("   - Player 1 has no %cs\n",GuessR);
 				fish = deck_instance.list[deck_instance.top_card];
@@ -102,7 +104,7 @@ int main(int args, char* argv[]) {
 					//DispResult(GuessR); 
 				transfer_cards(&user,&computer,GuessR);
 				 
-				if (check_add_book(&computer))
+				if (check_add_book(&computer) != '\0')
 					{
 					printf("   - Player 2 books %c\n  - Player 2 gets another turn\n", bookcheck); 
 					}
@@ -170,6 +172,5 @@ void book(struct player* target)
 	printf("\n"); 
 	return; 
 }
-void 
 
  
