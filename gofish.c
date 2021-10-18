@@ -8,9 +8,8 @@ int main(int args, char* argv[]) {
      int turncounter = 1;
      int winner = 1;
 
-     char Guess, GuessRank[2],GuessR, bookcheck;
-     char YorN[1] ;
-     char replay[20] ;
+     char Guess, GuessRank[3],GuessR, bookcheck;
+     char replay[20] ;if(replay==NULL) {return -1;} 
      struct card fish;
 	 shuffle();
 	 do{
@@ -45,7 +44,7 @@ int main(int args, char* argv[]) {
 				{
 						printf("   - Player 1 books %c\n  - Player 1 gets another turn\n", bookcheck);
 				} 
-				
+				//if fish.rank[]  //Create this edge case
 				else
 					{
 						printf("   - Player 2's turn\n");
@@ -71,8 +70,8 @@ int main(int args, char* argv[]) {
 		else
 		{ // COMPUTER TURN
 			GuessR = computer_play(&user);
-			printf("Player 2's turn, enter a Rank: \n");
-			if (Guess == 0)
+			printf("Player 2's turn, enter a Rank:%c \n",GuessR);
+			if (search(&computer,GuessRank) == 0)// Guess = 1 if found
 			{
 				printf("   - Player 1 has no %cs\n",GuessR);
 			fish = deck_instance.list[deck_instance.top_card];
@@ -149,12 +148,13 @@ if (replay == 'N'){
 void hand(struct player* target){
 	struct hand* temp = target->card_list; 
 	printf("\nPlayer 1's Hand:");
-	if (target->hand_size == 0){
+	if (target->hand_size == 0 || target == NULL ){
 		printf("\n");
 		return; 
 	}
 for (int i = 0; i < target->hand_size; i++){
-	printf(" %s%s%c",temp->top.rank[1], temp->top.rank[0], temp->top.suit );
+	printf(" %c%c%c",temp->top.rank[1], temp->top.rank[0], temp->top.suit );
+	temp = temp->next;
 }
 }
 void book(struct player* target)
@@ -164,7 +164,7 @@ void book(struct player* target)
 		return;
 	}
 	for(int i = 0; i < 7 && target->book[i] != '\0'; i ++){
-		printf("%s ", target->book[i]); 
+		printf("%c ", target->book[i]); 
 	}
 	printf("\n"); 
 }
