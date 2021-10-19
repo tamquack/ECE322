@@ -403,14 +403,20 @@ int main(int args, char* argv[]) {
 	
 
 	} // close the while loop
-	if (game_over(&computer) == 1)
+	if (game_over(&computer))
 	{
 	winner = 2;
 	}
 	else
 	{
-	winner = 1;
+		if(counter1 > counter2){
+			winner = 1;
+		}
+		else{
+			winner = 2;
+		}
 	} 
+
     if(counter1 == counter2){
 		printf("\nTie! Rematch?[Y/N]:"); 
 	}else{
