@@ -75,8 +75,7 @@ char check_add_book(struct player* target){
     struct hand* last_hand = target->card_list; 
 
     while(i++ < target->hand_size - 1 && last_hand != NULL){ 
-            last_hand = last_hand->next; 
-                if(n == 1 && last_card.rank[0] == last_hand->top.rank[0]){
+                 if(n == 1 && last_card.rank[0] == last_hand->top.rank[0]){
                     card1= last_hand->top; 
                     n++;
                 } else if (n == 2 && last_card.rank[0] == last_hand->top.rank[0]){
@@ -89,6 +88,7 @@ char check_add_book(struct player* target){
                     n++;
                     break;  
                 }
+                last_hand = last_hand->next; 
 
     }
     if (n == 4){

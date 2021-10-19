@@ -6,7 +6,7 @@
 int main(int args, char* argv[]) {
      int game = 1; 
       char GuessRank,GuessR, bookcheck;
-
+	  
 	 while(game == 1){
 	 int turncounter = 1;
      int winner = 1;	    
@@ -19,6 +19,14 @@ int main(int args, char* argv[]) {
      deal_player_cards(&computer);
 	 int counter1 = 0;
 	 int counter2 = 0; 
+	 if(user.book[counter1] != '\0'){
+		 printf("Player 1 books: %c\n", user.book[counter1]);
+		 counter1++;
+	 }
+	 if(computer.book[counter2] != '\0'){
+		printf("Player 2 books: %c", computer.book[counter2]);
+		counter2++;
+	} 
      
      while (1 == 1){
 	 hand(&user);
@@ -34,14 +42,64 @@ int main(int args, char* argv[]) {
 			}
 		if (turncounter % 2 == 1) // PLAYER TURN
 		{
+			if(user.hand_size == 0){
+				if(deck_size() < 51){
+				printf("Hand Empty, Player 1 draws a card\n"); 
+				add_card(&user, next_card());
+				hand(&user);
+				if (user.book[counter1] != '\0')
+					{
+						
+						if(user.book[counter1] == '0'){
+							printf("\n  - Player 1 books 10" );
+						}else{
+							bookcheck = user.book[counter1];
+							printf("\n   - Player 1 books %c\n", bookcheck); 
+						}
+						counter1++;
+					}
+				} else{
+					printf("Hand Empty, Player 1 draws a card\n"); 
+				printf("Deck is Empty, Player 1 cant draw a card, Game End\n");
+					break;
+				}
+			}
+			if(computer.hand_size == 0){
+				if(deck_size() < 51){
+					printf("Hand Empty, Player 2 draws a card\n"); 
+				add_card(&computer, next_card());
+				hand(&computer);
+				if (computer.book[counter2] != '\0')
+					{
+						
+						if(computer.book[counter2] == '0'){
+						printf("\n   - Player 2 books 10" );
+						}else{
+							bookcheck = computer.book[counter2];
+							printf("\n   - Player 2 books %c\n", bookcheck); 
+						}
+						counter2++;
+					}
+					
+					
+					} else{
+					printf("Hand Empty, Player 2 draws a card\n"); 
+					printf("Deck is Empty, Player 2 cant draw a card, Game End\n");
+					break;
+				}
+			}
 			GuessRank = user_play(&user); 
 			if (search(&computer,GuessRank) == 0)// Guess = 1 if found
 			//if (Guess == 0)
 			{
+				if(GuessRank == '0'){
+					printf("   - Player 2 has no 10s\n");
+					}else{
+					 printf("   - Player 2 has no %cs\n",GuessRank);
+					}
 				
-				printf("   - Player 2 has no %cs\n",GuessRank);
 				if(deck_size() == 51){
-				printf("Empty Book!\n"); 
+				printf("\nEmpty Deck!\n"); 
 					break; 
 				}fish = deck_instance.list[deck_instance.top_card];
 				add_card(&user,next_card());
@@ -50,9 +108,14 @@ int main(int args, char* argv[]) {
 				{
 					if (user.book[counter1] != '\0')
 				{
-					bookcheck = user.book[counter1]; 
+					if(user.book[counter1] == '0'){
+						printf("   - Player 1 books 10" );
+					}else{
+						bookcheck = user.book[counter1];
+						printf("   - Player 1 books %c\n", bookcheck); 
+					}  
 					counter1++;
-					printf("   - Player 1 books %c\n", bookcheck);
+					
 				}
 					printf("\n  - Player 1 gets another turn {Fishpath}\n");
 					continue;
@@ -60,11 +123,15 @@ int main(int args, char* argv[]) {
 
 				if (user.book[counter1] != '\0')
 				{
-				    bookcheck = user.book[counter1]; 
+					if(user.book[counter1] == '0'){
+						printf("   - Player 1 books 10" );
+					}else{
+						bookcheck = user.book[counter1];
+						printf("   - Player 1 books %c\n", bookcheck); 
+					}  
 					counter1++;
-					printf("   - Player 1 books %c\n", bookcheck);
-						printf("\n  - Player 1 gets another turn\n");
-				} 
+					
+				}
 				//if fish.rank[]  //Create this edge case
 				else
 					{
@@ -72,7 +139,7 @@ int main(int args, char* argv[]) {
 						turncounter++;
 					}			
 			}
-
+			
 			else
 			{
 			printf("Player 1 Has: ");
@@ -80,15 +147,67 @@ int main(int args, char* argv[]) {
 			printf("Player 2 Has: ");
 			DispResult(&computer, GuessRank);
 				transfer_cards(&computer,&user,GuessRank);
+				if(user.hand_size == 0){
+					if(deck_size() < 51){
+						printf("Hand Empty, Player 1 draws a card\n"); 
+					add_card(&user, next_card());
+					hand(&user);
+					if (user.book[counter1] != '\0')
+					{
+						
+						if(user.book[counter1] == '0'){
+							printf("\n   - Player 1 books 10" );
+						}else{
+							bookcheck = user.book[counter1];
+							printf("\n   - Player 1 books %c\n", bookcheck); 
+						}
+						counter1++;
+					}
+				} else{
+						printf("Hand Empty, Player 1 draws a card\n"); 
+					printf("Deck is Empty, Player 1 cant draw a card, Game End\n");
+						break;
+					}
+				}
+				if(computer.hand_size == 0){
+					if(deck_size() < 51){
+						printf("Hand Empty, Player 2 draws a card\n"); 
+						add_card(&computer, next_card());
+						hand(&computer);
+						if (computer.book[counter2] != '\0')
+					{
+						
+						if(computer.book[counter2] == '0'){
+						printf("\n   - Player 2 books 10" );
+						}else{
+							bookcheck = computer.book[counter2];
+							printf("\n   - Player 2 books %c\n", bookcheck); 
+						}
+						counter2++;
+					}
+					
+					
+					} else{
+						printf("Hand Empty, Player 2 draws a card\n"); 
+						printf("Deck is Empty, Player 2 cant draw a card, Game End\n");
+						break;
+					}
+				}
 				bookcheck = check_add_book(&user);
 
 				if (user.book[counter1] != '\0')
-				{ bookcheck = user.book[counter1]; 
+				{
+					if(user.book[counter1] == '0'){
+						printf("   - Player 1 books 10" );
+					}else{
+						bookcheck = user.book[counter1];
+						printf("   - Player 1 books %c\n", bookcheck); 
+					} 
 					counter1++; 
-				printf("   - Player 1 books %c\n", bookcheck);
+				
 				}
 				if(deck_size() == 51){
-					printf("Empty Deck!\n"); 
+					printf("\nEmpty Deck!\n"); 
 					break; 
 				}
 				printf("   - Player 1 gets another turn\n");
@@ -99,23 +218,82 @@ int main(int args, char* argv[]) {
 
 		else
 		{ // COMPUTER TURN
+			if(user.hand_size == 0){
+				if(deck_size() < 51){
+					printf("Hand Empty, Player 1 draws a card\n"); 
+					add_card(&user, next_card());
+					hand(&user);
+					if (user.book[counter1] != '\0')
+					{
+						
+						if(user.book[counter1] == '0'){
+							printf("\n   - Player 1 books 10" );
+						}else{
+							bookcheck = user.book[counter1];
+							printf("\n   - Player 1 books %c\n", bookcheck); 
+						}
+						counter1++;
+					}
+				}else{
+					printf("Hand Empty, Player 1 draws a card\n"); 
+				printf("Deck is Empty, Player 1 cant draw a card, Game End\n");
+					break;
+				}
+			}
+			if(computer.hand_size == 0){
+				if(deck_size() < 51){
+					printf("Hand Empty, Player 2 draws a card\n");
+					add_card(&computer, next_card()); 
+					hand(&computer);
+					if (computer.book[counter2] != '\0')
+					{
+						
+						if(computer.book[counter2] == '0'){
+						printf("\n   - Player 2 books 10" );
+						}else{
+							bookcheck = computer.book[counter2];
+							printf("\n   - Player 2 books %c\n", bookcheck); 
+						}
+						counter2++;
+					}
+					
+					
+					} else{
+		            printf("Hand Empty, Player 2 draws a card\n"); 
+					printf("Deck is Empty, Player 2 cant draw a card, Game End\n");
+					break;
+				}
+			}
 			GuessR = computer_play(&computer); //should be computer_play
-			printf("   - Player 2's turn, enter a Rank:%c \n",GuessR);
+			if(GuessR == '0'){
+				printf("   - Player 2's turn, enter a Rank: 10\n ");
+			} else{
+			printf("   - Player 2's turn, enter a Rank: %c \n",GuessR);
+			}
 			if (search(&user,GuessR) == 0)// Guess = 1 if found
 			{
 				
-				printf("   - Player 1 has no %cs\n",GuessR);
+				if(GuessR == '0'){
+					printf("   - Player 1 has no 10s\n");
+					}else{
+					 printf("   - Player 1 has no %cs\n",GuessRank);
+					}
 				if(deck_size() == 51){
-					printf("Empty Deck!\n ");
+					printf("\nEmpty Deck!\n ");
 					break; 
 				}
 				fish = deck_instance.list[deck_instance.top_card];
 				add_card(&computer,next_card());
-				printf("   - Go Fish, Player 2 draws %c%c%c\n",fish.rank[1],fish.rank[0],fish.suit);
+				printf("   - Go Fish, Player 2 draws a card\n");
 				if (fish.rank[0] == GuessR)			   
 				{if(computer.book[counter2] != '\0'){
-						bookcheck = computer.book[counter2]; 
-						printf("   - Player 2 books %c\n", bookcheck);
+					if(computer.book[counter2] == '0'){
+						printf("   - Player 2 books 10" );
+					}else{
+						bookcheck = computer.book[counter2];
+						printf("   - Player 2 books %c\n", bookcheck); 
+					}
+					
 						counter2++;
 					}
 					printf("\n  - Player 2 gets another turn {Fishpath}\n"); 
@@ -125,8 +303,13 @@ int main(int args, char* argv[]) {
 
 				if (computer.book[counter2] != '\0')
 				{
-					bookcheck = computer.book[counter2]; 
-					printf("   - Player 2 books %c\n  - Player 2 gets another turn\n", bookcheck);
+					if(computer.book[counter2] == '0'){
+						printf("   - Player 2 books 10" );
+					}else{
+						bookcheck = computer.book[counter2];
+						printf("   - Player 2 books %c\n", bookcheck); 
+					}
+					  printf("   - Player 2 gets another turn\n");
 					counter2++;
 				}
 				else
@@ -145,15 +328,70 @@ int main(int args, char* argv[]) {
 				printf("   - Player 1 Has: ");
 				    DispResult(&user, GuessR); 
 				transfer_cards(&user,&computer,GuessR);
+				
 				 
 				if (computer.book[counter2] != '\0')
 					{
-						bookcheck = computer.book[counter2]; 
+						
+						if(computer.book[counter2] == '0'){
+							printf("   - Player 2 books 10" );
+						}else{
+							bookcheck = computer.book[counter2];
+							printf("   - Player 2 books %c\n", bookcheck); 
+						}
 						counter2++;
-					printf("   - Player 2 books %c\n", bookcheck); 
 					}
+
+				if(computer.hand_size == 0){
+					if(deck_size() < 51){
+						printf("Hand Empty, Player 2 draws a card\n");
+						add_card(&computer, next_card());
+						hand(&computer);
+
+						if (computer.book[counter2] != '\0')
+					{
+					
+						if(computer.book[counter2] == '0'){
+						printf("\n   - Player 2 books 10" );
+						}else{
+							bookcheck = computer.book[counter2];
+							printf("\n   - Player 2 books %c\n", bookcheck); 
+						}
+						counter2++;
+					}
+					
+					
+					} else{
+						printf("Hand Empty, Player 2 draws a card\n"); 
+						printf("Deck is Empty, Player 2 cant draw a card, Game End\n");
+						break;
+					}
+				}
+				if(user.hand_size == 0){
+					if(deck_size(0) < 51){
+						printf("Hand Empty, Player 1 draws a card\n"); 
+					add_card(&user, next_card());
+					hand(&user);
+					if (computer.book[counter1] != '\0')
+					{
+						
+						if(computer.book[counter1] == '0'){
+							printf("\n   - Player 1 books 10" );
+						}else{
+							bookcheck = computer.book[counter2];
+							printf("\n   - Player 1 books %c\n", bookcheck); 
+						}
+						counter1++;
+					}
+					
+					} else{
+						printf("Hand Empty, Player 1 draws a card\n"); 
+					printf("Deck is Empty, Player 1 cant draw a card, Game End\n");
+						break;
+					}
+				}
 					if(deck_size() == 51){
-						printf("Empty Deck!\n");
+						printf("\nEmpty Deck!\n");
 						break; 
 					}
 				printf("   - Player 2 gets another turn\n");
@@ -173,9 +411,11 @@ int main(int args, char* argv[]) {
 	{
 	winner = 1;
 	} 
-
-	printf("Player %d Wins! %d-%d\nDo you want to play again[Y/N]:",winner, counter1, counter2);
-	
+    if(counter1 == counter2){
+		printf("\nTie! Rematch?[Y/N]:"); 
+	}else{
+	printf("\nPlayer %d Wins! %d-%d\nDo you want to play again?[Y/N]:",winner, counter1, counter2);
+	}
 	do{
 		scanf(" %2s",replay);
 		if (replay[0] == 'N'){
@@ -185,7 +425,7 @@ int main(int args, char* argv[]) {
 			break;
 		}
 		else{
-			printf("\nPlease enter Y/N:");
+			printf("Please enter Y/N:");
 		}
 		}while(1);
 if (replay[0] == 'N'){
@@ -212,7 +452,12 @@ for (int i = 0; i < target->hand_size; i++){
 void book(struct player* target)
 {
 	for(int i = 0; i < 7 && target->book[i] != '\0'; i ++){
+		if(target->book[i] == '0'){
+			printf("10 " );
+		}else{
 		printf("%c ", target->book[i]); 
+		}
+
 	}
 	printf("\n"); 
 	return; 

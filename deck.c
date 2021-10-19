@@ -6,7 +6,7 @@ int shuffle(){
     //struct deck deck_instance; 
     deck_instance = *(struct deck*)malloc(sizeof(struct deck));
 
-    char num[13] = {'2','3','4','5','6','7','8','9','0','J','Q','K','A'};
+    char num[14] = {'2','3','4','5','6','7','8','9','0','J','Q','K','A'};
     char Suit[4] = {'C','S','H','D'};
     struct card cards; 
     struct card cardT; 
@@ -26,7 +26,7 @@ int shuffle(){
         cards.rank[1]='\0'; 
   incs++;
     }
-
+deck_instance.list[0].rank[1] = '\0';
  srand(time(NULL));
 
  for(int i = 51; i >= 0; i--){
@@ -36,11 +36,7 @@ int shuffle(){
      deck_instance.list[j] = cardT; 
 
  }
- {
-    for (int k = 0; k < 52; k++)
-        printf("%c%c%c ", deck_instance.list[k].rank[1],deck_instance.list[k].rank[0],deck_instance.list[k].suit);
-    printf("\n");
- }
+ 
  deck_instance.top_card = 0; 
  printf("Shuffling deck...\n");
  return 0; 
